@@ -1,8 +1,8 @@
 """A DigitalOcean Python Pulumi program"""
 
 import pulumi
-import pulumi_digitalocean as do
 import pulumi_cloudflare as cf
+import pulumi_digitalocean as do
 
 # Setup Vars
 app_name = "gitlab"
@@ -126,3 +126,10 @@ gitlab_tunnel_config = cf.TunnelConfig(
     tunnel_id=gitlab_tunnel.id,
     config=cf.TunnelConfigConfigArgs(ingress_rules=ingress_rules),
 )
+
+hostnames = [record.hostname for record in dns_records]
+
+# Outputs
+pulumi.export("DigitalOcean Project:", gitlab_project.name)
+pulumi.export("VM public IP:", gitlab_vm.ipv4_address)
+pulumi.export("Gitlab URLs:", hostnames)
