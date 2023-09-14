@@ -1,0 +1,6 @@
+name: gitlab-infrastructure
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Gitlab Resources in DigitalOcean

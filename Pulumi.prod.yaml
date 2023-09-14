@@ -1,0 +1,5 @@
+config:
+  cf:accountId:
+    secure: AAABAMee+difUT4IekfdFpnMDaMoAPV4GzuDImUD8tPOiZ2JUbMSPQ3qSD2j8Y/LG+vuR3CfB3Nu50ZGz+ATiw==
+  cf:zoneId:
+    secure: AAABAD+2cJRh+4vMJWOR2HdVVnhcGXpMV/KZCV2UQqF66NBUUacgkjGGG0AlJbb657Yq+6CJeOMUxBG5Q8aupQ==
