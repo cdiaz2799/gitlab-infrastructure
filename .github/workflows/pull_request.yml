@@ -23,6 +23,7 @@ jobs:
       - name: Applying infrastructure 🚀
         uses: pulumi/actions@v4
         with:
+          work-dir: ./infrastructure
           command: preview
           stack-name: cdiaz3827/gitlab-infrastructure/prod
           comment-on-pr: true
