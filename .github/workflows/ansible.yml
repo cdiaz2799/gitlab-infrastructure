@@ -1,21 +1,20 @@
 ---
 name: Ansible
-on:
-  pull_request:
-  push:
-    branches:
-      - main
+
+on: [push, pull_request]
+
 jobs:
   lint:
     name: Ansible Lint
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./infrastructure
+        working-directory: ./ansible
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
   
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
-
+        with:
+          - ./ansible
