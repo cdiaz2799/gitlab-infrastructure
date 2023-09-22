@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./ansible
+        working-directory: ./infrastructure
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -17,4 +17,4 @@ jobs:
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
         with:
-          - ./ansible
+          path: ./ansible
