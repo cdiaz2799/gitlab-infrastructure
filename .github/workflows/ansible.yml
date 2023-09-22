@@ -1,7 +1,11 @@
 ---
 name: Ansible
 
-on: [push, pull_request]
+on:
+  push:
+    paths: 'ansible/**'
+  pull_request:
+    paths: 'ansible/**'
 
 jobs:
   lint:
