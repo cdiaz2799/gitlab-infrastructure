@@ -1,0 +1,29 @@
+---
+- name: Including OS-specific tasks...
+  ansible.builtin.include_tasks: main-{{ ansible_distribution | lower }}.yml
+
+- name: Configure TCP keepalive settings
+  ansible.posix.sysctl:
+    name: net.ipv4.tcp_keepalive_time
+    value: '300'
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Setup GitLab directories
+  ansible.builtin.file:
+    path: '{{ item.path }}'
+    owner: root
+    group: root
+    mode: '{{ item.mode }}'
+    state: directory
+  loop:
+    - { path: '/etc/gitlab', mode: '0775' }
+    - { path: '/etc/gitlab/ssl', mode: '0755' }
+    - { path: '/etc/gitlab/trusted-certs', mode: '0755' }
+
+- name: Create skip-unmigrated-data-check file
+  ansible.builtin.file:
+    path: /etc/gitlab/skip-unmigrated-data-check
+    state: touch
+    mode: '0755'

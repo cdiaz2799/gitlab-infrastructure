@@ -1,0 +1,35 @@
+---
+# - name: Update Apt Cache
+#   ansible.builtin.apt:
+#     update_cache: true
+
+- name: Install Prequisities
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+
+- name: Retrieve Docker GPG Key
+  ansible.builtin.get_url:
+    url: "{{ docker_apt_gpg_key }}"
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: '0644'
+    force: false
+  register: add_repository_key
+
+- ansible.builtin.debug:
+    var: docker_apt_repository
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: "{{ docker_apt_repository }}"
+    state: present
+
+- name: Install Docker Packages
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: latest
+    update_cache: true
+  loop: '{{ docker_apt_pkgs }}'

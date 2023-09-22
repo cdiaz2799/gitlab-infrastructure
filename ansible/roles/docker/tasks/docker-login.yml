@@ -1,0 +1,13 @@
+---
+- name: Set Python interpreter for Docker Login
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: "/opt/venvs/ansible/bin/python"
+
+- name: Authenticate to Docker Hub
+  community.docker.docker_login:
+    username: '{{ dockerhub_username }}'
+    password: '{{ dockerhub_pat }}'
+
+- name: Return Python interpreter
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: auto

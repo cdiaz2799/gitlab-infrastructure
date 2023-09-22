@@ -1,0 +1,9 @@
+---
+datadog_checks:
+  gitlab:
+    init_config:
+    instances:
+      - openmetrics_endpoint: https://gitlab.cdiaz.cloud/-/metrics?token=sQggeygzgZMyNDbM9Krr
+        gitlab_url: "http://localhost/?access_token=?token=sQggeygzgZMyNDbM9Krr"
+        tags:
+          - app:gitlab

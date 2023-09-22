@@ -45,13 +45,33 @@ gitlab_vm = do.Droplet(
     tags=tags,
 )
 
+# Set IP Reservation
+gitlab_ip = do.ReservedIp(
+    f"{app_name}-reserved-ip",
+    droplet_id=gitlab_vm.id,
+    region=region,
+)
+
+# Setup Inbound Port Rules
+inbound_ports = ["5010", "5011", "5050", "80", "443"]  # Container Registry
+inbound_rules = []
+for port in inbound_ports:
+    rule = do.FirewallInboundRuleArgs(
+        protocol="tcp",
+        port_range=port,
+        source_addresses=[
+            "0.0.0.0/0",
+            "::/0",
+        ],
+    )
+    inbound_rules.append(rule)
+
 # Setup Firewall
 gitlab_firewall = do.Firewall(
     f"{app_name}-firewall",
     name=f"{app_name}-firewall",
     droplet_ids=[gitlab_vm.id],
-    # Forbid all inbound traffic, ingress is managed by Cloudflare Tunnels
-    inbound_rules=[],
+    inbound_rules=inbound_rules,
     outbound_rules=[
         do.FirewallOutboundRuleArgs(
             protocol="icmp",
@@ -115,7 +135,16 @@ for dns_name, port in dns_dict.items():
             service=service,
         ),
     )
-
+# Create DNS Record for Container Registry
+container_dns = cf.Record(
+    resource_name=f"{app_name}-registry-dns",
+    zone_id=cf_config.get_secret("zoneId"),
+    name="containers",
+    type="A",
+    value=gitlab_ip.ip_address,
+    proxied=False,
+    comment="Managed by Pulumi",
+)
 # Append 404
 ingress_rules.append(cf.TunnelConfigConfigIngressRuleArgs(service="http_status:404"))
 
@@ -131,5 +160,6 @@ hostnames = [record.hostname for record in dns_records]
 
 # Outputs
 pulumi.export("DigitalOcean Project:", gitlab_project.name)
-pulumi.export("VM public IP:", gitlab_vm.ipv4_address)
+pulumi.export("VM public IP:", gitlab_ip.ip_address)
 pulumi.export("Gitlab URLs:", hostnames)
+pulumi.export("Gitlab Container Registry", container_dns.hostname)

@@ -1,0 +1,10 @@
+---
+- hosts: gitlab
+  become: true
+  roles:
+    - common
+    - zsh
+    - opcli
+    - datadog.datadog
+    - docker
+    - gitlab

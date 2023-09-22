@@ -1,0 +1,16 @@
+---
+## External URL
+gitlab_url: https://gitlab.cdiaz.cloud
+
+## Ubuntu / Debian
+gitlab_apt_dependencies:
+  - apt-transport-https
+  - git
+  - gnupg
+  - curl
+  - openssh-server
+  - ca-certificates
+  - tzdata
+  - perl
+  - unzip
+  - openssl

@@ -1,0 +1,4 @@
+---
+op_key: https://downloads.1password.com/linux/keys/1password.asc
+op_gpg_path: /usr/share/keyrings/1password-archive-keyring.gpg
+

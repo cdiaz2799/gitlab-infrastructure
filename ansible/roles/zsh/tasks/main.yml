@@ -1,0 +1,13 @@
+---
+- name: Include distro-specific tasks
+  ansible.builtin.include_tasks: main-{{ ansible_distribution | lower }}.yml
+
+- name: Install OMZ for each user
+  ansible.builtin.include_tasks: install-omz.yml
+  loop: '{{ users }}'
+
+- name: Set Users Shell to zsh
+  ansible.builtin.user:
+    name: '{{ item }}'
+    shell: /bin/zsh
+  loop: '{{ users }}'

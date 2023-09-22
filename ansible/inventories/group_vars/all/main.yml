@@ -1,0 +1,6 @@
+---
+timezone: 'America/Phoenix'
+
+users:
+    - cdiaz
+    - ansible

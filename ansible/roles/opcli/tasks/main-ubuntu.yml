@@ -1,0 +1,36 @@
+---
+- name: Add 1Password Repo
+  block:
+    - name: Add the key for the 1Password apt repository
+      ansible.builtin.get_url:
+        url: "{{ op_key }}"
+        dest: '{{ op_gpg_path }}'
+      register: gpg_key
+    - name: Add the 1Password apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ ansible_architecture }} signed-by={{ op_gpg_path }}] https://downloads.1password.com/linux/debian/{{ ansible_architecture }} stable main"
+        state: present
+        filename: 1password
+- name: Add the debsig-verify policy
+  block:
+    - name: Setup Directories
+      ansible.builtin.file:
+        path:
+          - /etc/debsig/policies/AC2D62742012EA22/
+          - /usr/share/debsig/keyrings/AC2D62742012EA22
+        state: directory
+    - name: Get policy
+      ansible.builtin.get_url:
+        url: https://downloads.1password.com/linux/debian/debsig/1password.pol
+        dest: /etc/debsig/policies/AC2D62742012EA22/1password.pol
+    - name: Get 1Password key
+      ansible.builtin.get_url:
+        url: '{{ op_key }}'
+        dest: /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+
+- name: Install CLI
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - 1password-cli
+    state: latest

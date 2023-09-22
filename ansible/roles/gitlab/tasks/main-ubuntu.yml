@@ -1,0 +1,26 @@
+---
+- name: Install Dependencies
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+  loop: '{{ gitlab_apt_dependencies }}'
+
+- name: Install Postfix
+  ansible.builtin.apt:
+    name:
+      - postfix
+    state: present
+
+- name: Setup Gitlab Repo
+  block:
+    - name: Add GPG Key
+      ansible.builtin.apt_key:
+        url: https://packages.gitlab.com/gpg.key
+        state: present
+
+- name: Install Gitlab CE
+  ansible.builtin.apt:
+    name: gitlab-ce
+    state: latest
+    update_cache: true

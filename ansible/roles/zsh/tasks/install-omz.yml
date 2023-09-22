@@ -1,0 +1,47 @@
+---
+- name: Build Install Location
+  ansible.builtin.set_fact:
+    omz_user_dir: '~{{ item }}'
+- ansible.builtin.set_fact:
+    omz_install_path: '{{ omz_user_dir }}/{{ omz_dir }}'
+- name: Clone oh-my-zsh repo
+  ansible.builtin.git:
+    repo: '{{ omz_repo }}'
+    dest: '{{ omz_install_path }}'
+    depth: 1
+    accept_hostkey: yes
+    update: true
+    version: 'master'
+    force: no
+- name: Set Ownership of Repo
+  ansible.builtin.file:
+    path: '{{ omz_install_path }}'
+    owner: '{{ item }}'
+    group: 'sudo'
+    mode: '0775'
+- name: Deploy .zshrc config
+  ansible.builtin.template:
+    src: zshrc.j2
+    dest: '{{ omz_user_dir }}/.zshrc'
+    backup: true
+    owner: '{{ item }}'
+    mode: '0775'
+- name: Setup Powerline Fonts
+  block:
+    - name: Setup Directory
+      ansible.builtin.file:
+        path: '{{ omz_user_dir }}/fontconfig'
+        owner: '{{ item }}'
+        state: directory
+        mode: '0775'
+    - name: Copy Config File
+      ansible.builtin.template:
+        src: conf.d.j2
+        dest: '{{ omz_user_dir }}/fontconfig/conf.d'
+        owner: '{{ item }}'
+        mode: '0775'
+      when: ansible_distribution == 'Ubuntu'
+      register: config_file
+    - name: Reload Configs
+      ansible.builtin.command: fc-cache -vf
+      when: config_file.changed and ansible_distribution == 'Ubuntu'

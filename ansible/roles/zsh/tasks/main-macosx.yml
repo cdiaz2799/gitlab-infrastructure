@@ -1,0 +1,6 @@
+---
+- name: Install zsh
+  community.general.homebrew:
+    name: '{{ item }}'
+    state: latest
+  loop: '{{ zsh_dependencies }}'

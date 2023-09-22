@@ -1,0 +1,44 @@
+---
+# - name: Retrieve secrets
+#   ansible.builtin.include_tasks: secrets.yml
+
+- name: Including OS-specific baseline...
+  ansible.builtin.include_tasks: main-{{ ansible_distribution | lower }}.yml
+
+- name: Create Users
+  ansible.builtin.user:
+    name: '{{ item }}'
+    shell: /bin/bash
+    create_home: true
+    groups:
+      - sudo
+    append: true
+    state: present
+  loop: '{{ users }}'
+
+- name: Allow passwordless sudo
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo  ALL=(ALL:ALL) NOPASSWD: ALL'
+
+# - name: Add Ansible SSH Key
+#   ansible.posix.authorized_key:
+#     user: ansible
+#     state: present
+#     key: '{{ ansible_public_key.field.value }}'
+
+- name: Install virtualenv
+  ansible.builtin.pip:
+    name: virtualenv
+    state: present
+
+- name: Setup pip modules
+  ansible.builtin.pip:
+    name: '{{ item }}'
+    state: latest
+    virtualenv: '{{ venv_name }}'
+    chdir: '{{ venv_path }}'
+    virtualenv_command: /usr/local/bin/virtualenv
+  loop: '{{ pip_pkgs }}'

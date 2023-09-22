@@ -1,0 +1,19 @@
+---
+## Update
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    update_cache: true
+    state: latest
+
+## Install Required Packages
+- name: Install Required Packages
+  ansible.builtin.dnf:
+    pkg: '{{ item }}'
+    state: latest
+  loop: '{{ base_packages }}'
+
+## Cleanup
+- name: Autoremove
+  ansible.builtin.dnf:
+    autoremove: true

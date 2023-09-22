@@ -1,0 +1,14 @@
+---
+## ZSH Installation
+zsh_dependencies:
+  - zsh
+  - git
+apt_packages:
+  - fonts-powerline
+omz_repo: https://github.com/ohmyzsh/ohmyzsh.git
+omz_dir: '.oh-my-zsh'
+## ZSH Config
+zsh_theme: agnoster
+zsh_update_mode: auto  ## Options: auto, reminder, disabled
+zsh_plugins:
+  - git

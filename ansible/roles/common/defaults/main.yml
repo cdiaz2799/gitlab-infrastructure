@@ -1,0 +1,19 @@
+---
+venv_name: ansible
+venv_path: '/opt/venvs/'
+
+base_packages:
+  # - build-essential
+  - curl
+  - ca-certificates
+  - git
+  - gnupg
+  - net-tools
+  - python3
+  - python3-pip
+  - vim
+  - wget
+
+pip_pkgs:
+  - virtualenv
+  - setuptools

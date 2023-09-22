@@ -1,0 +1,12 @@
+---
+- name: Install Depedencies
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: latest
+  loop: '{{ zsh_dependencies }}'
+
+- name: Install Apt-Specific packages
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: latest
+  loop: '{{ apt_packages }}'

@@ -1,0 +1,28 @@
+---
+## Update Cache
+- name: Update apt Cache
+  ansible.builtin.apt:
+    update_cache: true
+
+## Upgrade OS
+- name: Full Apt Upgrade
+  ansible.builtin.apt:
+    upgrade: full
+
+## Install Required Packages
+- name: Install Required Packages
+  ansible.builtin.apt:
+    pkg: '{{ item }}'
+    state: latest
+  loop: '{{ base_packages }}'
+
+- name: Install python3-pip
+  ansible.builtin.apt:
+    name: python3-pip
+    state: latest
+
+## Cleanup
+- name: Apt Autoclean and Autoremove
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true

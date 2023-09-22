@@ -1,0 +1,5 @@
+---
+datadog_site: "us3.datadoghq.com"
+datadog_checks:
+  process:
+    init_config:
