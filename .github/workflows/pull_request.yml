@@ -24,7 +24,7 @@ jobs:
         uses: pulumi/actions@v4
         with:
           command: preview
-          stack-name: /cdiaz3827/gitlab-infrastructure/prod
+          stack-name: cdiaz3827/gitlab-infrastructure/prod
           comment-on-pr: true
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
