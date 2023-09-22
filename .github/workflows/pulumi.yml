@@ -1,5 +1,5 @@
 ---
-name: Pulumi Up
+name: Pulumi
 on:
   push:
     paths: 'infrastructure/**'
@@ -26,7 +26,7 @@ jobs:
       - name: Installing dependencies 📦️
         run: pip install -r requirements.txt
 
-      - name: Preview infrastructure 🚀
+      - name: Preview infrastructure 🔎
         if: github.event_name == 'pull_request'
         uses: pulumi/actions@v4
         with:
